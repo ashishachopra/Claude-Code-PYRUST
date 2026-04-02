@@ -385,7 +385,7 @@ impl StreamState {
                 state.apply(tool_call);
                 let block_index = state.block_index();
                 if !state.started {
-                    if let Some(start_event) = state.start_event()? {
+                    if let Some(start_event) = state.start_event() {
                         state.started = true;
                         events.push(StreamEvent::ContentBlockStart(start_event));
                     } else {
@@ -437,7 +437,7 @@ impl StreamState {
 
         for state in self.tool_calls.values_mut() {
             if !state.started {
-                if let Some(start_event) = state.start_event()? {
+                if let Some(start_event) = state.start_event() {
                     state.started = true;
                     events.push(StreamEvent::ContentBlockStart(start_event));
                     if let Some(delta_event) = state.delta_event() {
@@ -505,22 +505,22 @@ impl ToolCallState {
         self.openai_index + 1
     }
 
-    fn start_event(&self) -> Result<Option<ContentBlockStartEvent>, ApiError> {
+    fn start_event(&self) -> Option<ContentBlockStartEvent> {
         let Some(name) = self.name.clone() else {
-            return Ok(None);
+            return None;
         };
         let id = self
             .id
             .clone()
             .unwrap_or_else(|| format!("tool_call_{}", self.openai_index));
-        Ok(Some(ContentBlockStartEvent {
+        Some(ContentBlockStartEvent {
             index: self.block_index(),
             content_block: OutputContentBlock::ToolUse {
                 id,
                 name,
                 input: json!({}),
             },
-        }))
+        })
     }
 
     fn delta_event(&mut self) -> Option<ContentBlockDeltaEvent> {
