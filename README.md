@@ -1,11 +1,6 @@
 # Rewriting Project Claw Code
-<p align="center">
-  <strong>Better Harness Tools, not merely storing the archive of leaked Claude Code</strong>
-</p>
 
-## Porting Status
 The main source tree is now Python-first.
-
 - `src/` contains the active Python porting workspace
 - `tests/` verifies the current Python workspace
 - the exposed snapshot is no longer part of the tracked repository state
